@@ -10,6 +10,8 @@ function App() {
 	const [regionLoaded, setRegionLoaded] = useState(false);
 	const [countries, setCountries] = useState([]);
 	const [matchedCountries, setMatchedCountries] = useState([]);
+	const [page, setPage] = useState(1);
+	var totalPages = Math.ceil(countries.length / 8);
 	var displayCountries;
 
 	async function getRegion() {
@@ -34,7 +36,21 @@ function App() {
 		var countryName = searchInput ? searchInput : "";
 		var breakCountryName = countryName.split("").join(".*");
 		var pattern = new RegExp(`${breakCountryName}`, "ig");
+		var firstCountryIndex = (page - 1) * 8;
+		var lastCountryIndex = page * 8;
+		var countriesPerPage = countries.slice(
+			firstCountryIndex,
+			lastCountryIndex
+		);
 
+		console.log(
+			"firstCountryIndex",
+			firstCountryIndex,
+			"lastCountryIndex",
+			lastCountryIndex,
+			"countriesPerPage",
+			countriesPerPage
+		);
 		console.log(
 			"breakCountryName",
 			breakCountryName,
@@ -43,7 +59,8 @@ function App() {
 			"searchInputPattern",
 			searchInputPattern
 		);
-		var matchedCountry = countries.reduce((newCountries, country) => {
+
+		var matchedCountry = countriesPerPage.reduce((newCountries, country) => {
 			// console.log("country name", country.name);
 			if (country.name.common.match(pattern)) {
 				let newCountry = {
@@ -70,7 +87,9 @@ function App() {
 	}
 
 	useEffect(() => {
+		// if(page)
 		matchCountries();
+		console.log("totalPages", totalPages);
 	}, [countries]);
 
 	function changeRegion() {
@@ -85,26 +104,27 @@ function App() {
 			setError(err);
 			console.log("error while fetching region", err);
 		});
+		setPage(1);
 		console.log("region", region, countries);
 		// return () => {
 		// 	// cleanup
 		// }
 	}, [region]);
 
-	function searchCountry(e) {
-		var keyPressed = e.key;
-		// var keyPressedUnicode = e.key.charCodeAt(0);
-		if (
-			(keyPressed.match(/[a-zA-Z]/g) && keyPressed.length === 1) ||
-			keyPressed === "Backspace"
-		) {
-			matchCountries();
-			console.log("alphabet pressed", e.key, e.metaKey, keyPressed, e);
-		} else {
-			console.log("key pressed", e.key, e);
-			return;
+	function paginate(navPage) {
+		if (navPage === "next-page") {
+			setPage(page + 1);
+		} else if (navPage === "prev-page") {
+			setPage(page - 1);
 		}
+		console.log("navPage", navPage);
 	}
+
+	useEffect(()=>{
+		if(regionLoaded){
+			matchCountries();
+		}
+	}, [page])
 
 	if (error) {
 		console.log("error", error);
@@ -132,7 +152,8 @@ function App() {
 						type="text"
 						name="country"
 						placeholder="Search for a country"
-						onKeyUp={searchCountry}
+						// onKeyDown={cutPasteSearch}
+						onChange={matchCountries}
 					/>
 				</div>
 				<div>
@@ -152,12 +173,29 @@ function App() {
 						<option value="oceania">Oceania</option>
 					</select>
 				</div>
-				{/* {displayCountries.length ? (
-					<div>{displayCountries}</div>
-				) : (
-					<div> No Country Matched </div>
-				)} */}
 				<div>{displayCountries}</div>
+				<div className="pagination">
+					{page == 1 ? (
+						""
+					) : (
+						<button
+							onClick={() => paginate("prev-page")}
+							className="prev"
+						>
+							prev
+						</button>
+					)}
+					{page == totalPages ? (
+						""
+					) : (
+						<button
+							onClick={() => paginate("next-page")}
+							className="next"
+						>
+							next
+						</button>
+					)}
+				</div>
 			</main>
 		</div>
 	);
