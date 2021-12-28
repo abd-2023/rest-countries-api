@@ -9,9 +9,10 @@ function App() {
 	const [error, setError] = useState(null);
 	const [regionLoaded, setRegionLoaded] = useState(false);
 	const [countries, setCountries] = useState([]);
-	const [matchedCountries, setMatchedCountries] = useState([]);
+	const [matchedCountries, setMatchedCountries] = useState("");
 	const [page, setPage] = useState(1);
-	var totalPages = Math.ceil(countries.length / 8);
+	const [totalPages, setTotalPages] = useState(1);
+	// totalPages = Math.ceil(countries.length / 8);
 	var displayCountries;
 
 	async function getRegion() {
@@ -28,6 +29,7 @@ function App() {
 
 		console.log("fetch completed");
 		setCountries(data);
+		setPage(1);
 	}
 
 	function matchCountries() {
@@ -38,29 +40,8 @@ function App() {
 		var pattern = new RegExp(`${breakCountryName}`, "ig");
 		var firstCountryIndex = (page - 1) * 8;
 		var lastCountryIndex = page * 8;
-		var countriesPerPage = countries.slice(
-			firstCountryIndex,
-			lastCountryIndex
-		);
 
-		console.log(
-			"firstCountryIndex",
-			firstCountryIndex,
-			"lastCountryIndex",
-			lastCountryIndex,
-			"countriesPerPage",
-			countriesPerPage
-		);
-		console.log(
-			"breakCountryName",
-			breakCountryName,
-			"pattern",
-			pattern,
-			"searchInputPattern",
-			searchInputPattern
-		);
-
-		var matchedCountry = countriesPerPage.reduce((newCountries, country) => {
+		var matchedCountry = countries.reduce((newCountries, country) => {
 			// console.log("country name", country.name);
 			if (country.name.common.match(pattern)) {
 				let newCountry = {
@@ -82,13 +63,40 @@ function App() {
 			}
 			return newCountries;
 		}, []);
+		
+		// setAllMatchedCountries(matchedCountry);
 
-		setMatchedCountries(matchedCountry);
+		var countriesPerPage = matchedCountry.slice(
+			firstCountryIndex,
+			lastCountryIndex
+		);
+
+		// prettier-ignore
+		console.log( "firstCountryIndex", firstCountryIndex, "lastCountryIndex", lastCountryIndex, "countriesPerPage", countriesPerPage );
+		// prettier-ignore
+		console.log( "breakCountryName", breakCountryName, "pattern", pattern, "searchInputPattern", searchInputPattern );
+
+		setMatchedCountries(
+			countriesPerPage.length ? countriesPerPage : "No Country Found"
+		);
+		return matchedCountry;
+		// setMatchedCountries(matchedCountry);
 	}
 
+	function searchCountry(){
+		var matchedCountry = matchCountries();
+		setPage(1);
+		setTotalPages(Math.ceil(matchedCountry.length / 8));
+	}
+	// useEffect(() => {
+
+	// }, [allMatchedCountries])
+
 	useEffect(() => {
-		// if(page)
-		matchCountries();
+		if (regionLoaded) {
+			matchCountries();
+			setTotalPages(Math.ceil(countries.length / 8));
+		}
 		console.log("totalPages", totalPages);
 	}, [countries]);
 
@@ -104,7 +112,6 @@ function App() {
 			setError(err);
 			console.log("error while fetching region", err);
 		});
-		setPage(1);
 		console.log("region", region, countries);
 		// return () => {
 		// 	// cleanup
@@ -120,11 +127,11 @@ function App() {
 		console.log("navPage", navPage);
 	}
 
-	useEffect(()=>{
-		if(regionLoaded){
+	useEffect(() => {
+		if (regionLoaded) {
 			matchCountries();
 		}
-	}, [page])
+	}, [page]);
 
 	if (error) {
 		console.log("error", error);
@@ -132,12 +139,11 @@ function App() {
 	} else if (!regionLoaded) {
 		displayCountries = <div> Loading... </div>;
 	} else {
-		displayCountries = matchedCountries.length
+		displayCountries = Array.isArray(matchedCountries)
 			? matchedCountries.map((country) => (
 					<Country country={country} key={uuid()} />
 			  ))
-			: "No Country Found";
-		// displayCountries = displayCountries.length ? displayCountries: <div> No countries Matched </div>;
+			: matchedCountries;
 	}
 
 	return (
@@ -153,16 +159,12 @@ function App() {
 						name="country"
 						placeholder="Search for a country"
 						// onKeyDown={cutPasteSearch}
-						onChange={matchCountries}
+						onChange={searchCountry}
 					/>
 				</div>
 				<div>
-					<select
-						name="region"
-						id="region"
-						defaultValue=""
-						onChange={changeRegion}
-					>
+					{/* prettier-ignore */}
+					<select name="region" id="region" defaultValue="" onChange={changeRegion} >
 						<option disabled value="">
 							Filter by Region
 						</option>
