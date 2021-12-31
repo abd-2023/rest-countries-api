@@ -1,6 +1,5 @@
 import "./App.scss";
 import { useState, useEffect } from "react";
-import Header from "./components/Header";
 import Country from "./components/Country";
 import uuid from "react-uuid";
 
@@ -12,7 +11,6 @@ function App() {
 	const [matchedCountries, setMatchedCountries] = useState("");
 	const [page, setPage] = useState(1);
 	const [totalPages, setTotalPages] = useState(1);
-	// totalPages = Math.ceil(countries.length / 8);
 	var displayCountries;
 
 	async function getRegion() {
@@ -40,6 +38,10 @@ function App() {
 		var pattern = new RegExp(`${breakCountryName}`, "ig");
 		var firstCountryIndex = (page - 1) * 8;
 		var lastCountryIndex = page * 8;
+		var sortedArray = countries.sort((x, y) =>
+			x.name.common.localeCompare(y.name.common)
+		);
+		console.log("sort countries", sortedArray);
 
 		var matchedCountry = countries.reduce((newCountries, country) => {
 			// console.log("country name", country.name);
@@ -55,7 +57,7 @@ function App() {
 					capital: country.capital
 						? country.capital.join(", ")
 						: "No Capital",
-					orignal_name: country.name.common,
+					original_name: country.name.common,
 				};
 				newCountries.push(newCountry);
 				// console.log("country matched", country)
@@ -63,7 +65,7 @@ function App() {
 			}
 			return newCountries;
 		}, []);
-		
+
 		// setAllMatchedCountries(matchedCountry);
 
 		var countriesPerPage = matchedCountry.slice(
@@ -83,10 +85,12 @@ function App() {
 		// setMatchedCountries(matchedCountry);
 	}
 
-	function searchCountry(){
+	function searchCountry() {
 		var matchedCountry = matchCountries();
 		setPage(1);
-		setTotalPages(Math.ceil(matchedCountry.length / 8));
+		// setTotalPages(Math.ceil(matchedCountry.length / 8));
+		var totalSearchPages = Math.ceil(matchedCountry.length / 8);
+		setTotalPages(totalSearchPages > 0 ? totalSearchPages : 1);
 	}
 	// useEffect(() => {
 
@@ -94,8 +98,10 @@ function App() {
 
 	useEffect(() => {
 		if (regionLoaded) {
-			matchCountries();
-			setTotalPages(Math.ceil(countries.length / 8));
+			var matchedCountry = matchCountries();
+			var totalSearchPages = Math.ceil(matchedCountry.length / 8);
+			setTotalPages(totalSearchPages > 0 ? totalSearchPages : 1);
+			// setTotalPages(Math.ceil(matchedCountry.length / 8));
 		}
 		console.log("totalPages", totalPages);
 	}, [countries]);
@@ -148,7 +154,6 @@ function App() {
 
 	return (
 		<div className="App">
-			<Header />
 			<main>
 				<div className="country-search">
 					<input
@@ -158,7 +163,6 @@ function App() {
 						type="text"
 						name="country"
 						placeholder="Search for a country"
-						// onKeyDown={cutPasteSearch}
 						onChange={searchCountry}
 					/>
 				</div>
