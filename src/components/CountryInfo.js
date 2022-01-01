@@ -22,7 +22,7 @@ const CountryInfo = () => {
 		console.log("all borders", allBorders, countryData);
 		var allBordersNames = [];
 		for (let i = 0; i < allBorders.length; i++) {
-			if(i == 3){
+			if (i === 3) {
 				break;
 			}
 			let countryCode = allBorders[i];
@@ -79,46 +79,36 @@ const CountryInfo = () => {
 	} else {
 		console.log("country name", country.name);
 		displayCountry = (
-			<div>
-				<Link to="/">Back</Link>
+			<div className="country-info">
+				<Link to="/" className="back-home">Back</Link>
 				<img
 					src={country.flags.svg}
 					width="300"
 					alt={`Flag of ${country.name.common}`}
+					className="country-flag"
 				/>
-				<h2> {country.name.common} </h2>
-				<p> Native name: {country.name.nativeName[Object.keys(country.languages)[0]].common} </p>
-				<p>
-					{" "}
-					Population: {country.population.toLocaleString(
-						"en-IN"
-					)}{" "}
-				</p>
-				<p> Region: {country.region} </p>
-				<p> Sub Region: {country.subregion} </p>
-				<p>
-					{" "}
-					Capital:{" "}
-					{country.capital
-						? country.capital.join(", ")
-						: "No Capital"}{" "}
-				</p>
-				<p> Top Level Domain: {country.tld.join(", ")} </p>
-				<p> Currencies: {Object.keys(country.currencies)} </p>
-				<p>
-					{" "}
-					Languages: {Object.values(country.languages).join(
-						", "
-					)}{" "}
-				</p>
+				<h2 className="country-name"> {country.name.common} </h2>
+				{/* prettier-ignore */}
+				<p> <b> Native name:</b> {Object.values(country.name.nativeName)[0].common} </p>
+				{/* prettier-ignore */}
+				<p> <b> Population:</b> {country.population.toLocaleString( "en-IN" )}</p>
+				<p> <b> Region: </b>{country.region} </p>
+				<p> <b> Sub Region:</b> {country.subregion} </p>
+				{/* prettier-ignore */}
+				<p> <b> Capital: </b>{country.capital ? country.capital.join(", ") : "No Capital"} </p>
+				<p> <b> Top Level Domain:</b> {country.tld.join(", ")} </p>
+				<p> <b> Currencies:</b> {Object.keys(country.currencies)} </p>
+				<p><b> Languages: </b>{Object.values(country.languages).join(", ")}</p>
 
-				{borders.length ? <h3>Border Countries</h3>: "" }
+				{borders.length ? <h3>Border Countries</h3> : ""}
 				{borders.map((borderCountry) => (
 					<Link
 						to={`/country/${encodeURIComponent(
 							borderCountry.toLowerCase()
 						)}`}
 						key={uuid()}
+						className="border-country"
+						onClick={window.scroll(0, 0)}
 					>
 						{borderCountry}
 					</Link>

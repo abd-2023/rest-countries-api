@@ -125,6 +125,7 @@ function App() {
 	}, [region]);
 
 	function paginate(navPage) {
+		window.scroll(0, 0);
 		if (navPage === "next-page") {
 			setPage(page + 1);
 		} else if (navPage === "prev-page") {
@@ -156,6 +157,7 @@ function App() {
 		<div className="App">
 			<main>
 				<div className="country-search">
+					<img src="search-icon.svg" alt="" />
 					<input
 						id="country-input"
 						className="country"
@@ -166,7 +168,7 @@ function App() {
 						onChange={searchCountry}
 					/>
 				</div>
-				<div>
+				<div className="region-filter">
 					{/* prettier-ignore */}
 					<select name="region" id="region" defaultValue="" onChange={changeRegion} >
 						<option disabled value="">

@@ -1,18 +1,121 @@
-.app-header{
+html {
+	scroll-behavior: smooth;
+}
+* {
+	box-sizing: border-box;
+	font-family: "Nunito Sans", "Times New Roman", Times, serif;
+}
+.app-header {
 	box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 12px;
 	padding: 2rem 1rem;
-	p{
-		margin: 0;
+	h1 {
+		font-size: 1rem;
+		font-weight: 800;
 	}
 }
-.pagination{
+.country-search {
+	display: flex;
+	margin: 2rem 1rem;
+	box-shadow: rgb(0 0 0 / 10%) 0px 4px 12px;
+	padding: 1.2rem 2rem;
+	border-radius: 0.3rem;
+	input {
+		border: none;
+		outline: none;
+		padding-left: 1rem;
+	}
+}
+.region-filter {
+	box-shadow: rgb(0 0 0 / 10%) 0px 4px 12px;
+	padding: 1rem 1.4rem;
+	margin: 2rem 1rem;
+	border-radius: 0.3rem;
+	width: 55%;
+	select {
+		border: none;
+		padding-right: 3.5rem;
+		background: #fff;
+	}
+}
+.country-name {
+	font-weight: 800;
+}
+.pagination {
 	overflow: hidden;
+	padding: 1rem;
+
+	.next {
+		float: right;
+	}
+	button {
+		background: #fff;
+		border: none;
+		box-shadow: rgb(0 0 0 / 10%) 0px 4px 12px;
+		padding: 0.7rem 2rem;
+		border-radius: 0.3rem;
+		transition: box-shadow .3s;
+		&:hover, &:focus{
+			box-shadow: rgb(0 0 0 / 20%) 0px 4px 50px;
+		}
+	}
 }
-.next{
-	float: right;
-}
-.single-country{
+.single-country {
 	display: block;
 	color: #000;
 	text-decoration: none;
+	width: 75%;
+	margin: 3rem auto;
+	box-shadow: rgb(0 0 0 / 10%) 0px 4px 12px;
+	border-radius: 0.3rem;
+	overflow: hidden;
+	transition: box-shadow .3s;
+	.country-flag {
+		width: 100%;
+	}
+	.country-details {
+		padding: 0 1.5rem 1rem;
+	}
+	&:hover, &:focus{
+		box-shadow: rgb(0 0 0 / 20%) 0px 4px 50px;
+	}
+}
+.back-home {
+	box-shadow: rgb(0 0 0 / 10%) 0px 4px 12px;
+	padding: 0.7rem 2rem;
+	margin: 3rem 0 5rem;
+	border-radius: 0.3rem;
+	display: inline-block;
+	text-decoration: none;
+	color: #000;
+	&::before {
+		content: "\27F5";
+		display: inline-block;
+		transform: translateX(-0.5rem);
+		transition: all .3s;
+	}
+	&:hover::before, &:focus::before {
+		transform: translateX(-1rem);
+	}
+}
+.country-info {
+	padding: 0 2rem;
+	.country-flag{
+		width: 100%;
+	}
+}
+.border-country {
+	box-shadow: rgb(0 0 0 / 10%) 0px 4px 12px;
+    padding: 0.3rem 0;
+    margin-right: 0.6rem;
+    border-radius: 0.2rem;
+    display: inline-block;
+    text-decoration: none;
+    color: #000;
+    margin-bottom: 2rem;
+    width: 30%;
+    text-align: center;
+	transition: box-shadow .3s;
+	&:hover, &:focus{
+		box-shadow: rgb(0 0 0 / 20%) 0px 4px 50px;
+	}
 }
