@@ -13,23 +13,6 @@ function App() {
 	const [totalPages, setTotalPages] = useState(1);
 	var displayCountries;
 
-	async function getRegion() {
-		console.log("fetch started");
-		var regionUrl = `https://restcountries.com/v3.1/region/${
-			region ? region : "africa"
-		}`;
-		// var regionUrl = "https://mock.codes/500";
-		console.log("region url", regionUrl);
-		var regionData = await fetch(regionUrl);
-		var data = await regionData.json();
-
-		setRegionLoaded(true);
-
-		console.log("fetch completed");
-		setCountries(data);
-		setPage(1);
-	}
-
 	function matchCountries() {
 		var searchInput = document.getElementById("country-input").value;
 		var searchInputPattern = new RegExp(`[${searchInput}]`, "ig");
@@ -113,15 +96,45 @@ function App() {
 	}
 
 	useEffect(() => {
+		const abortFetch = new AbortController();
+		async function getRegion() {
+			console.log("fetch started");
+			var regionUrl = `https://restcountries.com/v3.1/region/${
+				region ? region : "africa"
+			}`;
+			// var regionUrl = "https://mock.codes/500";
+			console.log("region url", regionUrl);
+			var regionData = await fetch(regionUrl, {
+				signal: abortFetch.signal,
+			});
+			var data = await regionData.json();
+
+			setRegionLoaded(true);
+
+			console.log("fetching all countries completed");
+			setCountries(data);
+			setPage(1);
+		}
+
 		// effect
 		getRegion().catch((err) => {
-			setError(err);
-			console.log("error while fetching region", err);
+			if (err.name === "AbortError") {
+				console.log("error while fetching region", err, err.name);
+			} else {
+				console.log(
+					"error excpet abort error while fetching region",
+					err,
+					err.name
+				);
+				setError(err);
+			}
+			console.log("error while fetching region", err, err.name);
 		});
 		console.log("region", region, countries);
-		// return () => {
-		// 	// cleanup
-		// }
+		return () => {
+			console.log("all countries fetch cleanup");
+			abortFetch.abort();
+		};
 	}, [region]);
 
 	function paginate(navPage) {
@@ -156,21 +169,22 @@ function App() {
 	return (
 		<div className="App">
 			<main>
-				<div className="country-search">
-					<img src="search-icon.svg" alt="" />
-					<input
-						id="country-input"
-						className="country"
-						aria-label="Search for a country"
-						type="text"
-						name="country"
-						placeholder="Search for a country"
-						onChange={searchCountry}
-					/>
-				</div>
-				<div className="region-filter">
-					{/* prettier-ignore */}
-					<select name="region" id="region" defaultValue="" onChange={changeRegion} >
+				<div className="search-filter">
+					<div className="country-search">
+						<img src="search-icon.svg" alt="" />
+						<input
+							id="country-input"
+							className="country"
+							aria-label="Search for a country"
+							type="text"
+							name="country"
+							placeholder="Search for a country"
+							onChange={searchCountry}
+						/>
+					</div>
+					<div className="region-filter">
+						{/* prettier-ignore */}
+						<select name="region" id="region" defaultValue="" onChange={changeRegion} >
 						<option disabled value="">
 							Filter by Region
 						</option>
@@ -180,8 +194,9 @@ function App() {
 						<option value="europe">Europe</option>
 						<option value="oceania">Oceania</option>
 					</select>
+					</div>
 				</div>
-				<div>{displayCountries}</div>
+				<div className="all-countries">{displayCountries}</div>
 				<div className="pagination">
 					{page == 1 ? (
 						""
