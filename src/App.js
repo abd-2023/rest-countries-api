@@ -11,6 +11,7 @@ function App() {
 	const [matchedCountries, setMatchedCountries] = useState("");
 	const [page, setPage] = useState(1);
 	const [totalPages, setTotalPages] = useState(1);
+	const [sort, setSort] = useState("sort1");
 	var displayCountries;
 
 	function matchCountries() {
@@ -21,9 +22,52 @@ function App() {
 		var pattern = new RegExp(`${breakCountryName}`, "ig");
 		var firstCountryIndex = (page - 1) * 8;
 		var lastCountryIndex = page * 8;
-		var sortedArray = countries.sort((x, y) =>
-			x.name.common.localeCompare(y.name.common)
-		);
+		var sortedArray;
+		// var sortedArray = countries.sort((x, y) =>
+		// 	x.name.common.localeCompare(y.name.common)
+		// );
+		switch (sort) {
+			case "sort1":
+				sortedArray = countries.sort((fsEle, sdEle) => {
+					var fsElename = fsEle.name.common;
+					var sdElename = sdEle.name.common;
+					if (fsElename < sdElename) {
+						return -1;
+					} else if (fsElename > sdElename) {
+						return 1;
+					}
+					return 0;
+				});
+				break;
+			case "sort2":
+				sortedArray = countries.sort((fsEle, sdEle) => {
+					var fsElename = fsEle.name.common;
+					var sdElename = sdEle.name.common;
+					if (fsElename < sdElename) {
+						return 1;
+					} else if (fsElename > sdElename) {
+						return -1;
+					}
+					return 0;
+				});
+				break;
+			case "sort3":
+				sortedArray = countries.sort((fsEle, sdEle) => {
+					var fsElename = fsEle.population;
+					var sdElename = sdEle.population;
+					return fsElename - sdElename;
+				});
+				break;
+			case "sort4":
+				sortedArray = countries.sort((fsEle, sdEle) => {
+					var fsElename = fsEle.population;
+					var sdElename = sdEle.population;
+					return sdElename - fsElename;
+				});
+				break;
+			default:
+				break;
+		}
 		console.log("sort countries", sortedArray);
 
 		var matchedCountry = countries.reduce((newCountries, country) => {
@@ -137,6 +181,13 @@ function App() {
 		};
 	}, [region]);
 
+	function sortChanged() {
+		var sortValue = document.getElementById("sort").value;
+		setSort(sortValue);
+	}
+	useEffect(() => {
+		matchCountries();
+	}, [sort]);
 	function paginate(navPage) {
 		window.scroll(0, 0);
 		if (navPage === "next-page") {
@@ -168,23 +219,42 @@ function App() {
 
 	return (
 		<div className="App">
-			<main>
-				<div className="search-filter">
-					<div className="country-search">
-						<img src="search-icon.svg" alt="" />
-						<input
-							id="country-input"
-							className="country"
-							aria-label="Search for a country"
-							type="text"
-							name="country"
-							placeholder="Search for a country"
-							onChange={searchCountry}
-						/>
-					</div>
-					<div className="region-filter">
-						{/* prettier-ignore */}
-						<select name="region" id="region" defaultValue="" onChange={changeRegion} >
+			<div className="search-filter">
+				<div className="country-search">
+					<img src="search-icon.svg" alt="" />
+					<input
+						id="country-input"
+						className="country"
+						aria-label="Search for a country"
+						type="text"
+						name="country"
+						placeholder="Search for a country"
+						onChange={searchCountry}
+					/>
+				</div>
+				<div className="sort">
+					<select
+						name="sort"
+						id="sort"
+						defaultValue=""
+						onChange={sortChanged}
+					>
+						<option value="" disabled>
+							Defualt Sort
+						</option>
+						<option value="sort1">Sort by name: A-Z </option>
+						<option value="sort2">Sort by name : Z-A</option>
+						<option value="sort3">
+							Sort by Population: low to high
+						</option>
+						<option value="sort4">
+							Sort by Population: high to low
+						</option>
+					</select>
+				</div>
+				<div className="region-filter">
+					{/* prettier-ignore */}
+					<select name="region" id="region" defaultValue="" onChange={changeRegion} >
 						<option disabled value="">
 							Filter by Region
 						</option>
@@ -194,32 +264,31 @@ function App() {
 						<option value="europe">Europe</option>
 						<option value="oceania">Oceania</option>
 					</select>
-					</div>
 				</div>
-				<div className="all-countries">{displayCountries}</div>
-				<div className="pagination">
-					{page == 1 ? (
-						""
-					) : (
-						<button
-							onClick={() => paginate("prev-page")}
-							className="prev"
-						>
-							prev
-						</button>
-					)}
-					{page == totalPages ? (
-						""
-					) : (
-						<button
-							onClick={() => paginate("next-page")}
-							className="next"
-						>
-							next
-						</button>
-					)}
-				</div>
-			</main>
+			</div>
+			<div className="all-countries">{displayCountries}</div>
+			<div className="pagination">
+				{page == 1 ? (
+					""
+				) : (
+					<button
+						onClick={() => paginate("prev-page")}
+						className="prev"
+					>
+						prev
+					</button>
+				)}
+				{page == totalPages ? (
+					""
+				) : (
+					<button
+						onClick={() => paginate("next-page")}
+						className="next"
+					>
+						next
+					</button>
+				)}
+			</div>
 		</div>
 	);
 }

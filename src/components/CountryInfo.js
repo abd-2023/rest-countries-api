@@ -88,25 +88,20 @@ const CountryInfo = () => {
 	} else {
 		console.log("country name", country.name);
 		displayCountry = (
-			<main>
-				<div className="country-info">
-					<Link to="/" className="back-home">
-						Back
-					</Link>
-					<div className="desktop-counry-layout">
-						<img
-							src={country.flags.svg}
-							width="300"
-							alt={`Flag of ${country.name.common}`}
-							className="country-flag"
-						/>
-						<div className="desktop-country-meta">
-							<h2 className="country-name">
-								{" "}
-								{country.name.common}{" "}
-							</h2>
-							{/* prettier-ignore */}
-							<div className="desktop-country-info">
+				<div className="desktop-counry-layout">
+					<img
+						src={country.flags.svg}
+						width="300"
+						alt={`Flag of ${country.name.common}`}
+						className="country-flag"
+					/>
+					<div className="desktop-country-meta">
+						<h2 className="country-name">
+							{" "}
+							{country.name.common}{" "}
+						</h2>
+						{/* prettier-ignore */}
+						<div className="desktop-country-info">
 							<div>
 								<p> <b> Native name:</b> {Object.values(country.name.nativeName)[0].common} </p>
 								{/* prettier-ignore */}
@@ -123,28 +118,34 @@ const CountryInfo = () => {
 							</div>
 						</div>
 
-							{borders.length ? <h3>Border Countries</h3> : ""}
-							{borders.map((borderCountry) => (
-								<Link
-									to={`/country/${encodeURIComponent(
-										borderCountry.toLowerCase()
-									)}`}
-									key={uuid()}
-									className="border-country"
-									onClick={window.scroll(0, 0)}
-								>
-									{borderCountry}
-								</Link>
-							))}
-						</div>
+						{borders.length ? <h3>Border Countries</h3> : ""}
+						{borders.map((borderCountry) => (
+							<Link
+								to={`/country/${encodeURIComponent(
+									borderCountry.toLowerCase()
+								)}`}
+								key={uuid()}
+								className="border-country"
+								onClick={window.scroll(0, 0)}
+							>
+								{borderCountry}
+							</Link>
+						))}
 					</div>
-					{/* prettier-ignore */}
-					<iframe src={mapURL} width="310" height="200" style={{ border: "none" }} ></iframe>
-				</div>
-			</main>
+			</div>
 		);
 	}
-	return displayCountry;
+	// return displayCountry;
+	return (
+		<div className="country-info">
+				<Link to="/" className="back-home">
+					Back
+				</Link>
+				{displayCountry}
+				{/* prettier-ignore */}
+				<iframe src={mapURL} width="310" height="200" style={{ border: "none" }} ></iframe>
+		</div>
+	)
 };
 
 export default CountryInfo;

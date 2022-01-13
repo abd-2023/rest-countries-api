@@ -12,11 +12,16 @@ ReactDOM.render(
 	<React.StrictMode>
 		<BrowserRouter>
 			<Header />
-			<Routes>
-				<Route path="/" element={<App />} />
-				<Route path="/country/:countryName" element={<CountryInfo />} />
-				<Route path="*" element={<NotFound />} />
-			</Routes>
+			<main>
+				<Routes>
+					<Route path="/" element={<App />} />
+					<Route
+						path="/country/:countryName"
+						element={<CountryInfo />}
+					/>
+					<Route path="*" element={<NotFound />} />
+				</Routes>
+			</main>
 		</BrowserRouter>
 	</React.StrictMode>,
 	document.getElementById("root")

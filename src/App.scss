@@ -1,7 +1,9 @@
 html {
 	scroll-behavior: smooth;
 }
-* {
+*,
+*::before,
+*::after {
 	box-sizing: border-box;
 	font-family: "Nunito Sans", "Times New Roman", Times, serif;
 }
@@ -45,10 +47,10 @@ main {
 		width: 100%;
 	}
 }
-.region-filter {
+.sort, .region-filter {
 	box-shadow: rgb(0 0 0 / 10%) 0px 4px 12px;
 	padding: 1rem 1.4rem;
-	margin: 2rem 1rem;
+	margin: 1rem;
 	border-radius: 0.3rem;
 	display: inline-block;
 	select {
@@ -61,8 +63,8 @@ main {
 	font-weight: 800;
 }
 .pagination {
-	overflow: hidden;
 	padding: 1rem;
+	height: 75px!important;
 
 	.next {
 		float: right;
@@ -78,6 +80,11 @@ main {
 		&:focus {
 			box-shadow: rgb(0 0 0 / 20%) 0px 4px 50px;
 		}
+	}
+}
+@media only screen and (min-width: 768px){
+	.pagination{
+		padding: 1rem 0;
 	}
 }
 .single-country {
@@ -104,8 +111,11 @@ main {
 @media only screen and (min-width: 768px) {
 	.single-country {
 		flex: 1 0 15rem;
-		max-width: 300px;
+		max-width: 265px;
 		margin: 0;
+		display: flex;
+		flex-direction: column;
+		justify-content: space-between;
 	}
 }
 .back-home {
@@ -180,7 +190,8 @@ button:hover {
 			width: 30rem;
 			padding: 1rem 2rem;
 		}
-		.region-filter {
+		.sort, .region-filter {
+			margin: 2rem 1rem;
 			margin-right: 0;
 		}
 	}
