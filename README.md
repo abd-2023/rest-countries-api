@@ -34,7 +34,7 @@ Users should be able to:
 
 ### Links
 
-<!-- - Solution URL: [Add solution URL here](https://your-solution-url.com) -->
+- Solution URL: [Solution on Front end Mentor](https://www.frontendmentor.io/solutions/rest-countries-api-challenge-1akWOXgDR)
 - Live Site URL: [REST Countries API Challenge Live Site](https://rest-api-countries-abu.netlify.app/)
 
 ## My process
@@ -64,6 +64,5 @@ I wanna understand more about HTTP protocols and status codes and how to use fet
 
 ## Author
 
-<!-- - Website - [Add your name here](https://www.your-site.com) -->
 - Frontend Mentor - [@Abu-Ubada2020](https://www.frontendmentor.io/profile/Abu-Ubada2020)
 - Twitter - [@ab_coding](https://twitter.com/ab_coding)

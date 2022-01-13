@@ -238,6 +238,7 @@ function App() {
 						id="sort"
 						defaultValue=""
 						onChange={sortChanged}
+						aria-label="sort countries"
 					>
 						<option value="" disabled>
 							Defualt Sort
@@ -254,7 +255,7 @@ function App() {
 				</div>
 				<div className="region-filter">
 					{/* prettier-ignore */}
-					<select name="region" id="region" defaultValue="" onChange={changeRegion} >
+					<select name="region" id="region" aria-label="Filter Region" defaultValue="" onChange={changeRegion} >
 						<option disabled value="">
 							Filter by Region
 						</option>
