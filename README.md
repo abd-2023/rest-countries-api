@@ -66,3 +66,4 @@ I wanna understand more about HTTP protocols and status codes and how to use fet
 
 - Frontend Mentor - [@Abu-Ubada2020](https://www.frontendmentor.io/profile/Abu-Ubada2020)
 - Twitter - [@ab_coding](https://twitter.com/ab_coding)
+- Linkedin - [@abu-ubada](https://www.linkedin.com/in/abu-ubada/)
